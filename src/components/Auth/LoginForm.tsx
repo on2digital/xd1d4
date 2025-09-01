@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Scale, Eye, EyeOff } from 'lucide-react';
+import { Scale, Eye, EyeOff, Sparkles } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -9,6 +9,21 @@ const LoginForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { signIn } = useAuth();
+
+  const handleDemoLogin = async () => {
+    setLoading(true);
+    setEmail('demo@chamber.law');
+    setPassword('demo123456');
+    
+    try {
+      await signIn('demo@chamber.law', 'demo123456');
+      toast.success('Demo login successful!');
+    } catch (error) {
+      toast.error('Demo login failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,6 +97,16 @@ const LoginForm: React.FC = () => {
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
+
+          <button
+            type="button"
+            onClick={handleDemoLogin}
+            disabled={loading}
+            className="w-full bg-emerald-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
+          >
+            <Sparkles className="w-4 h-4" />
+            <span>{loading ? 'Logging in...' : 'Try Demo Login'}</span>
+          </button>
         </form>
 
         <div className="mt-6 text-center">
@@ -90,10 +115,10 @@ const LoginForm: React.FC = () => {
           </a>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-gray-200 text-center">
+        <div className="mt-6 pt-6 border-t border-gray-200 text-center">
           <p className="text-xs text-gray-500">
-            Demo Credentials:<br/>
-            Email: demo@chamber.law | Password: demo123456
+            Use the "Try Demo Login" button above for instant access<br/>
+            or manually enter: demo@chamber.law / demo123456
           </p>
         </div>
       </div>
