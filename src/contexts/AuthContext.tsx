@@ -10,6 +10,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   updateProfile: (updates: Partial<User>) => Promise<void>;
+  demoLogin: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -97,6 +98,43 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUserProfile(prev => prev ? { ...prev, ...updates } : null);
   };
 
+  const demoLogin = () => {
+    // Create mock user for demo
+    const mockUser = {
+      id: 'demo-user-id',
+      email: 'demo@chamber.law',
+      aud: 'authenticated',
+      role: 'authenticated',
+      email_confirmed_at: new Date().toISOString(),
+      phone: '',
+      confirmation_sent_at: null,
+      confirmed_at: new Date().toISOString(),
+      recovery_sent_at: null,
+      last_sign_in_at: new Date().toISOString(),
+      app_metadata: {},
+      user_metadata: {},
+      identities: [],
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    } as any;
+
+    const mockProfile: User = {
+      id: 'demo-user-id',
+      tenant_id: 'demo-tenant',
+      email: 'demo@chamber.law',
+      role: 'senior_lawyer',
+      name: 'Adv. Rahman (Demo)',
+      phone: '+8801712345678',
+      language: 'en',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+
+    setUser(mockUser);
+    setUserProfile(mockProfile);
+    setLoading(false);
+  };
+
   const value = {
     user,
     userProfile,
@@ -104,6 +142,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signIn,
     signOut,
     updateProfile,
+    demoLogin,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

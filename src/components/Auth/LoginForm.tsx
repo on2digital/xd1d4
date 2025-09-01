@@ -8,21 +8,13 @@ const LoginForm: React.FC = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { signIn } = useAuth();
+  const { signIn, demoLogin } = useAuth();
 
-  const handleDemoLogin = async () => {
+  const handleDemoLogin = () => {
     setLoading(true);
-    setEmail('demo@chamber.law');
-    setPassword('demo123456');
-    
-    try {
-      await signIn('demo@chamber.law', 'demo123456');
-      toast.success('Demo login successful!');
-    } catch (error) {
-      toast.error('Demo login failed. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+    demoLogin();
+    toast.success('Demo login successful!');
+    setLoading(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
